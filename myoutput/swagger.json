@@ -1,0 +1,616 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "SAMPLE TEST Service for Covid19.",
+    "version" : "v1",
+    "title" : "Covid19 Service"
+  },
+  "paths" : {
+    "/api/DataImport/datasources" : {
+      "get" : {
+        "tags" : [ "DataImport" ],
+        "summary" : "Get Dicom data sources from Dicom service",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      }
+    },
+    "/api/DataImport/searches" : {
+      "post" : {
+        "tags" : [ "DataImport" ],
+        "summary" : "Request Dicom Service to search DICOM",
+        "consumes" : [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/SearchRequest"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      }
+    },
+    "/api/DataImport/move" : {
+      "post" : {
+        "tags" : [ "DataImport" ],
+        "summary" : "Request Dicom Service to move DICOM",
+        "consumes" : [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/MoveRequest"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      }
+    },
+    "/api/DataImport/bulksave" : {
+      "post" : {
+        "tags" : [ "DataImport" ],
+        "summary" : "Request Data manager to save bulk data",
+        "consumes" : [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/BulkDataSet"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      }
+    },
+    "/api/DataSet" : {
+      "get" : {
+        "tags" : [ "DataSet" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      }
+    },
+    "/api/DataSet/{dataSetId}" : {
+      "get" : {
+        "tags" : [ "DataSet" ],
+        "parameters" : [ {
+          "name" : "dataSetId",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      }
+    },
+    "/api/DataSet/{dataSetId}/data/{dataId}/clinicaldata" : {
+      "get" : {
+        "tags" : [ "DataSet" ],
+        "parameters" : [ {
+          "name" : "dataSetId",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "dataId",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      }
+    },
+    "/api/DataSet/submit/{dataSetId}" : {
+      "post" : {
+        "tags" : [ "DataSet" ],
+        "parameters" : [ {
+          "name" : "dataSetId",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      }
+    },
+    "/api/DataSet/UploadManagerCallBack" : {
+      "post" : {
+        "tags" : [ "DataSet" ],
+        "consumes" : [ "application/json-patch+json", "application/json", "text/json", "application/*+json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/UploadTaskResult"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      }
+    },
+    "/api/Default/IsAlive" : {
+      "get" : {
+        "tags" : [ "Default" ],
+        "summary" : "Check service health",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      }
+    },
+    "/api/Submission" : {
+      "get" : {
+        "tags" : [ "Submission" ],
+        "summary" : "Get DICOM submission data",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      }
+    },
+    "/api/Submission/retry" : {
+      "post" : {
+        "tags" : [ "Submission" ],
+        "summary" : "Initiate Retry Failed Submissions",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Success"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "SearchCriterion" : {
+      "type" : "object",
+      "properties" : {
+        "path" : {
+          "type" : "string"
+        },
+        "tagKeyword" : {
+          "type" : "string"
+        },
+        "values" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "StudySearchCriteria" : {
+      "type" : "object",
+      "properties" : {
+        "studyDate" : {
+          "type" : "string"
+        },
+        "studyTime" : {
+          "type" : "string"
+        },
+        "accessionNumber" : {
+          "type" : "string"
+        },
+        "patientsName" : {
+          "type" : "string"
+        },
+        "patientId" : {
+          "type" : "string"
+        },
+        "studyId" : {
+          "type" : "string"
+        },
+        "studyInstanceUid" : {
+          "type" : "string"
+        },
+        "modalitiesInStudy" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "sopClassesInStudy" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "referringPhysiciansName" : {
+          "type" : "string"
+        },
+        "studyDescription" : {
+          "type" : "string"
+        },
+        "nameOfPhysiciansReadingStudy" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "admittingDiagnosesDescription" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "issuerOfPatientId" : {
+          "type" : "string"
+        },
+        "patientsBirthDate" : {
+          "type" : "string"
+        },
+        "patientsBirthTime" : {
+          "type" : "string"
+        },
+        "patientsSex" : {
+          "type" : "string"
+        },
+        "otherPatientNames" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "patientsAge" : {
+          "type" : "string"
+        },
+        "patientsSize" : {
+          "type" : "string"
+        },
+        "patientsWeight" : {
+          "type" : "string"
+        },
+        "ethnicGroup" : {
+          "type" : "string"
+        },
+        "occupation" : {
+          "type" : "string"
+        },
+        "additionalPatientHistory" : {
+          "type" : "string"
+        },
+        "patientComments" : {
+          "type" : "string"
+        },
+        "custom" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/SearchCriterion"
+          }
+        }
+      }
+    },
+    "SeriesSearchCriteria" : {
+      "type" : "object",
+      "properties" : {
+        "studyInstanceUid" : {
+          "type" : "string"
+        },
+        "modality" : {
+          "type" : "string"
+        },
+        "seriesNumber" : {
+          "type" : "string"
+        },
+        "seriesInstanceUid" : {
+          "type" : "string"
+        },
+        "custom" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/SearchCriterion"
+          }
+        }
+      }
+    },
+    "IncludeElement" : {
+      "type" : "object",
+      "properties" : {
+        "path" : {
+          "type" : "string"
+        },
+        "tagKeyword" : {
+          "type" : "string"
+        }
+      }
+    },
+    "SearchRequest" : {
+      "type" : "object",
+      "properties" : {
+        "taskId" : {
+          "type" : "string",
+          "format" : "uuid"
+        },
+        "sourceType" : {
+          "type" : "string",
+          "description" : "\r\n\r\n",
+          "enum" : [ "Dicom", "WebDicom", "FileSystem" ]
+        },
+        "sourceApplicationEntity" : {
+          "type" : "string"
+        },
+        "sourceAddress" : {
+          "type" : "string"
+        },
+        "sourcePort" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "studyFilter" : {
+          "$ref" : "#/definitions/StudySearchCriteria"
+        },
+        "seriesFilter" : {
+          "$ref" : "#/definitions/SeriesSearchCriteria"
+        },
+        "include" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/IncludeElement"
+          }
+        },
+        "rowsNumberLimit" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "rowsToSkip" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "waitForCompletion" : {
+          "type" : "boolean"
+        }
+      }
+    },
+    "MoveRequestItem" : {
+      "type" : "object",
+      "properties" : {
+        "studyInstanceUid" : {
+          "type" : "string"
+        },
+        "seriesInstanceUid" : {
+          "type" : "string"
+        },
+        "expectedInstancesCount" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "clientMetadata" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "OperationCallback" : {
+      "type" : "object",
+      "properties" : {
+        "uri" : {
+          "type" : "string",
+          "format" : "uri"
+        }
+      }
+    },
+    "MoveRequest" : {
+      "type" : "object",
+      "properties" : {
+        "taskId" : {
+          "type" : "string",
+          "format" : "uuid"
+        },
+        "sourceType" : {
+          "type" : "string",
+          "description" : "\r\n\r\n",
+          "enum" : [ "Dicom", "WebDicom", "FileSystem" ]
+        },
+        "sourceApplicationEntity" : {
+          "type" : "string"
+        },
+        "sourceAddress" : {
+          "type" : "string"
+        },
+        "sourcePort" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "targetListenerId" : {
+          "type" : "string",
+          "format" : "uuid"
+        },
+        "level" : {
+          "type" : "string",
+          "description" : "\r\n\r\n",
+          "enum" : [ "Study", "Series", "Everything" ]
+        },
+        "items" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/MoveRequestItem"
+          }
+        },
+        "callback" : {
+          "$ref" : "#/definitions/OperationCallback"
+        },
+        "clientMetadata" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "AnnotationInput" : {
+      "type" : "object",
+      "properties" : {
+        "dataSetId" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "dataId" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "name" : {
+          "type" : "string"
+        },
+        "content" : {
+          "type" : "string"
+        },
+        "contentType" : {
+          "type" : "string"
+        }
+      }
+    },
+    "BulkData" : {
+      "type" : "object",
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        },
+        "id" : {
+          "type" : "string",
+          "format" : "uuid"
+        },
+        "annotation" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/AnnotationInput"
+          }
+        },
+        "pending" : {
+          "type" : "boolean"
+        },
+        "anonymized" : {
+          "type" : "string"
+        }
+      }
+    },
+    "BulkDataSet" : {
+      "type" : "object",
+      "properties" : {
+        "datasetName" : {
+          "type" : "string"
+        },
+        "sourceId" : {
+          "type" : "string",
+          "format" : "uuid"
+        },
+        "label" : {
+          "type" : "string"
+        },
+        "data" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/BulkData"
+          }
+        }
+      }
+    },
+    "TaskStatus" : {
+      "type" : "integer",
+      "format" : "int32",
+      "enum" : [ "0", "1", "2", "3", "4" ]
+    },
+    "TaskItemStatus" : {
+      "type" : "integer",
+      "format" : "int32",
+      "enum" : [ "0", "1", "2", "3", "4", "5" ]
+    },
+    "UploadTaskItemResult" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "format" : "uuid"
+        },
+        "filePath" : {
+          "type" : "string"
+        },
+        "status" : {
+          "$ref" : "#/definitions/TaskItemStatus"
+        },
+        "errorCode" : {
+          "type" : "string"
+        },
+        "errorMessage" : {
+          "type" : "string"
+        },
+        "lastProcessedDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        }
+      }
+    },
+    "UploadTaskResult" : {
+      "type" : "object",
+      "properties" : {
+        "taskId" : {
+          "type" : "string",
+          "format" : "uuid"
+        },
+        "status" : {
+          "$ref" : "#/definitions/TaskStatus"
+        },
+        "createdDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "updatedDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "itemResults" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/UploadTaskItemResult"
+          }
+        },
+        "errorCode" : {
+          "type" : "string"
+        },
+        "errorMessage" : {
+          "type" : "string"
+        }
+      }
+    }
+  }
+}
