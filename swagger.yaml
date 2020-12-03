@@ -1,8 +1,8 @@
 swagger: '2.0'
 info:
-  description: This is a simple API
+  description: This is My Test API
   version: 1.0.0
-  title: Simple Inventory API
+  title: Simple Inventory Module API
   # put the contact info for your development or API team
   contact:
     email: you@your-company.com
