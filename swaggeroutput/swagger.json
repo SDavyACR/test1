@@ -1,0 +1,12 @@
+---
+swagger: "2.0"
+info:
+  description: ""
+  version: V1
+  title: TEST API
+host: virtserver.swaggerhub.com
+basePath: /sibbyd/TESTME/V1
+schemes:
+- https
+paths: {}
+definitions: {}
